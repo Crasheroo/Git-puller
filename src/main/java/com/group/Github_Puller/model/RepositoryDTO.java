@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 @Builder
 @Data
-public class GithubRepoResponse {
+public class RepositoryDTO {
     @JsonProperty("full_name")
     private String fullName;
     private String description;

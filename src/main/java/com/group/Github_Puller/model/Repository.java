@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "repository")
 @Data
-public class Repo {
+public class Repository {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
