@@ -9,6 +9,7 @@ import com.group.Github_Puller.model.RepositoryEntity;
 import com.group.Github_Puller.repository.RepoRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -25,7 +26,7 @@ public class RepositoryService {
     public RepositoryDTO getRepoFromDb(String owner, String repoName) {
         String fullName = owner + "/" + repoName;
         RepositoryEntity repo = repoRepository.findByFullName(fullName)
-                .orElseThrow(() -> new RepoException("Repo not found"));
+                .orElseThrow(() -> new RepoException("Repo not found", HttpStatus.NOT_FOUND));
         return repositoryMapper.toDTO(repo);
     }
 
@@ -33,7 +34,7 @@ public class RepositoryService {
     public RepositoryDTO saveRepoDetails(String owner, String repoName) throws Exception {
         String fullName = (owner + "/" + repoName);
         repoRepository.findByFullName(fullName)
-                .ifPresent(existing -> { throw new RepoException("Repo already exists"); });
+                .ifPresent(existing -> { throw new RepoException("Repo already exists", HttpStatus.CONFLICT); });
 
         Repository repo = githubClient.getRepo(owner, repoName);
 
@@ -55,7 +56,7 @@ public class RepositoryService {
         String fullName = owner + "/" + repoName;
 
         RepositoryEntity existingRepo = repoRepository.findByFullName(fullName)
-                .orElseThrow(() -> new RepoException("Repository not found: " + fullName));
+                .orElseThrow(() -> new RepoException("Repository not found: " + fullName, HttpStatus.NOT_FOUND));
 
         repoValidation(repoDTO, existingRepo);
 
@@ -68,7 +69,7 @@ public class RepositoryService {
         String fullName = (owner + "/" + repoName);
 
         RepositoryEntity repoToDelete = repoRepository.findByFullName(fullName)
-                .orElseThrow(() -> new RepoException("Repository not found: " + fullName));
+                .orElseThrow(() -> new RepoException("Repository not found: " + fullName, HttpStatus.NOT_FOUND));
 
         repoRepository.delete(repoToDelete);
     }
