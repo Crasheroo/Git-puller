@@ -16,7 +16,7 @@ public class GithubHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(RepoException.class)
     public ErrorMessage handleRepoException(RepoException ex) {
         return ErrorMessage.builder()
-                .status(HttpStatus.NOT_FOUND.value())
+                .status(ex.getStatus().value())
                 .error(HttpStatus.NOT_FOUND)
                 .message(ex.getMessage())
                 .timestamp(LocalDateTime.now())
