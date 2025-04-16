@@ -7,8 +7,9 @@ import java.time.LocalDateTime;
 
 @Builder
 public record ErrorMessage
-        (String message,
-         HttpStatus status,
-         LocalDateTime errorTime
+        (Integer status,
+         HttpStatus error,
+         String message,
+         LocalDateTime timestamp
         ) {
 }

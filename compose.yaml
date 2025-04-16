@@ -1,6 +1,7 @@
 services:
   postgres:
     image: 'postgres:latest'
+    container_name: db
     environment:
       - 'POSTGRES_DB=mydatabase'
       - 'POSTGRES_PASSWORD=secret'
@@ -9,6 +10,8 @@ services:
       - '5432:5432'
     networks:
       - db-net
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
   pgadmin:
     image: elestio/pgadmin:latest
@@ -21,6 +24,11 @@ services:
       - "1234:1234"
     networks:
       - db-net
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
 
 networks:
   db-net:
+volumes:
+  postgres_data:
+  pgadmin_data:

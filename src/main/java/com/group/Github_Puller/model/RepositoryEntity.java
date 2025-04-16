@@ -1,15 +1,23 @@
 package com.group.Github_Puller.model;
 
+
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
+@Entity
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class RepositoryDTO {
+@Table(name = "repository")
+public class RepositoryEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(unique = true)
     private String fullName;
     private String description;
     private String cloneUrl;
