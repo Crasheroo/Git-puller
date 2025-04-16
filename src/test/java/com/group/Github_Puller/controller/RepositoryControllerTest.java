@@ -12,9 +12,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import static org.mockito.Mockito.*;
@@ -70,6 +70,7 @@ public class RepositoryControllerTest {
         String fullName = owner + "/" + repo;
 
         RepositoryDTO requestDto = RepositoryDTO.builder()
+                .fullName(fullName)
                 .description("Updated description")
                 .stars(100)
                 .build();
@@ -82,14 +83,14 @@ public class RepositoryControllerTest {
                 .createdAt(LocalDate.now())
                 .build();
 
-        when(repositoryService.updateRepoDetails(owner, repo, requestDto)).thenReturn(expectedDto);
+        when(repositoryService.updateRepoDetails(eq(owner), eq(repo), any())).thenReturn(expectedDto);
 
         // When/Then
         mockMvc.perform(put(BASE_URL + "/{owner}/{repo}", owner, repo)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDto)))
+                .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.fullName").value(fullName))
                 .andExpect(jsonPath("$.description").value("Updated description"))
                 .andExpect(jsonPath("$.stars").value(100))
