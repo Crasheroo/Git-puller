@@ -89,7 +89,6 @@ public class RepositoryControllerTest {
         mockMvc.perform(put(BASE_URL + "/{owner}/{repo}", owner, repo)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDto)))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.fullName").value(fullName))
                 .andExpect(jsonPath("$.description").value("Updated description"))
